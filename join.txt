@@ -79,13 +79,15 @@
         `students`.`surname` AS `student_surname`,
         `students`.`name` AS `student_name`,
         `courses`.`name` AS `course_name`,
-        COUNT(`exam_student`.`vote`) AS `attempts`
+        COUNT(`exam_student`.`vote`) AS `attempts`,
+        MAX(`exam_student`.`vote`) AS `max_vote`
     FROM `students`
-    INNER JOIN `exam_student`
+    JOIN `exam_student`
     ON `students`.`id` = `exam_student`.`student_id`
-    INNER JOIN `exams`
+    JOIN `exams`
     ON `exam_student`.`exam_id` = `exams`.`id`
-    INNER JOIN `courses`
+    JOIN `courses`
     ON `exams`.`course_id` = `courses`.`id`
     GROUP BY `exam_student`.`student_id`, `courses`.`id`
+    HAVING MAX(`exam_student`.`vote`) >= 18
     ORDER BY `students`.`id`;
